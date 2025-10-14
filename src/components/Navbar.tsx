@@ -1,4 +1,4 @@
-import { BookOpen, Menu, X, LogOut } from 'lucide-react';
+import { Menu, X, LogOut } from 'lucide-react';
 import { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -27,20 +27,18 @@ export default function Navbar({ currentPage, onNavigate }: NavbarProps) {
     : baseNavItems;
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-200 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+        <div className="flex justify-between items-center h-20">
           <button
             onClick={() => onNavigate('home')}
             className="flex items-center gap-3 group"
           >
-            <div className="bg-gradient-to-br from-red-600 to-red-700 p-2 rounded-xl group-hover:scale-105 transition-transform duration-300">
-              <BookOpen className="w-6 h-6 text-white" />
-            </div>
-            <div className="flex flex-col items-start">
-              <span className="text-xl font-bold text-gray-900">Magazine Archive</span>
-              <span className="text-sm text-gray-600 font-urdu">میگزین آرکائیو</span>
-            </div>
+            <img
+              src="/Generated Image October 14, 2025 - 3_35PM.png"
+              alt="Magazine Logo"
+              className="h-16 w-auto object-contain group-hover:scale-105 transition-transform duration-300"
+            />
           </button>
 
           <div className="hidden md:flex items-center gap-1">
