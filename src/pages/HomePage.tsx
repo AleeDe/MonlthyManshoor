@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { BookOpen, Library, ArrowRight, Sparkles } from 'lucide-react';
+import { BookOpen, Library, ArrowRight, Sparkles, ExternalLink } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import type { MagazineIssue, SisterMagazine } from '../lib/database.types';
 import HomeSkeleton from '../components/HomeSkeleton';
@@ -63,27 +63,22 @@ export default function HomePage({ onNavigate }: HomePageProps) {
         <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+          
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div className="space-y-6 animate-fade-in">
-              <div className="inline-flex items-center gap-2 bg-red-100 text-red-700 px-4 py-2 rounded-full text-sm font-medium">
-                <Sparkles className="w-4 h-4" />
-                45 Years of Excellence
+              <div className="inline-flex items-center gap-2 bg-red-100 text-red-700 px-4 py-2 rounded-full text-sm font-medium shadow-sm">
+                <Sparkles className="w-4 h-4" /> Since 1964 • Archives
               </div>
 
-              <h1 className="text-5xl md:text-6xl font-bold text-gray-900 leading-tight">
-                Your Monthly
-                <span className="block text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-red-700">
-                  Literary Companion
-                </span>
-              </h1>
-
-              <p className="text-xl text-gray-600 leading-relaxed font-urdu" dir="rtl">
-                آپ کا ماہانہ ادبی ساتھی - 45 سال کی ادبی روایت
+              <p className="text-2xl md:text-3xl font-semibold text-gray-900 leading-relaxed">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-red-700">Manshoor Archives,</span> Started publishing in 1964 under the leadership of Comrade Tufail Abbas. The living history of Pakistan’s Left, surviving bans and forced closures for over five decades.
               </p>
 
-              <p className="text-lg text-gray-600 leading-relaxed">
-                Explore four and a half decades of rich Urdu literature, insightful articles, and cultural heritage preserved in our digital archive.
+              <p className="font-urdu text-xl sm:text-2xl md:text-3xl text-gray-900 leading-relaxed" dir="rtl">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-red-700">اوراقِ منشور</span> کامریڈ طفیل عباس کی قیادت میں 1964 میں اشاعت کا آغاز۔ نصف صدی سے زائد فکری و عوامی مزاحمت کی زندہ داستان، جو پابندیوں کے باوجود جاری رہی۔
               </p>
+
+              <div className="h-1 w-24 bg-gradient-to-r from-red-600 to-red-500 rounded-full"></div>
 
               <div className="flex flex-wrap gap-4 pt-4">
                 <button
@@ -177,30 +172,47 @@ export default function HomePage({ onNavigate }: HomePageProps) {
       </section>
 
       {sisterMagazines.length > 0 && (
-        <section className="py-20 bg-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12">
-              <h2 className="text-4xl font-bold text-gray-900 mb-4">Sister Publications</h2>
-              <p className="text-xl text-gray-600 font-urdu" dir="rtl">ہمارے دیگر اشاعتیں</p>
+        <section className="relative py-28 bg-gradient-to-b from-white via-red-50/40 to-white overflow-hidden">
+          <div className="pointer-events-none absolute -top-10 -right-10 w-64 h-64 bg-red-200/30 rounded-full blur-3xl"></div>
+          <div className="pointer-events-none absolute -bottom-16 -left-16 w-64 h-64 bg-red-300/20 rounded-full blur-3xl"></div>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+            <div className="text-center mb-16">
+              <div className="inline-flex items-center gap-2 bg-red-100 text-red-700 px-4 py-2 rounded-full text-sm font-medium shadow-sm mb-4">
+                <Sparkles className="w-4 h-4" /> Sister Websites
+              </div>
+              <h2 className="text-5xl font-bold text-gray-900 mb-4">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-red-700">Sister Publications</span>
+              </h2>
+              <p className="text-2xl sm:text-3xl text-gray-600 font-urdu" dir="rtl">ہمارے دیگر اشاعتیں</p>
+              <div className="h-1.5 w-32 bg-gradient-to-r from-red-600 to-red-500 rounded-full mx-auto mt-8"></div>
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
               {sisterMagazines.map((magazine) => (
                 <a
                   key={magazine.id}
                   href={magazine.website_url || '#'}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group bg-white p-6 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border-2 border-gray-100 hover:border-red-600"
+                  className="group relative bg-white/80 backdrop-blur p-8 rounded-3xl shadow-2xl hover:shadow-[0_20px_50px_-10px_rgba(239,68,68,0.35)] transition-all duration-300 hover:-translate-y-2 border-2 border-red-100 hover:border-red-300 ring-1 ring-transparent hover:ring-red-200"
                 >
-                  <img
-                    src={magazine.logo_url}
-                    alt={magazine.name}
-                    className="w-full h-32 object-contain mb-4"
-                  />
-                  <h3 className="text-center text-sm font-semibold text-gray-900 group-hover:text-red-600 transition-colors">
-                    {magazine.name}
-                  </h3>
+                  <div className="absolute -inset-0.5 rounded-3xl bg-gradient-to-r from-red-600/0 via-red-500/0 to-red-400/0 opacity-0 group-hover:opacity-100 blur-xl transition-opacity"></div>
+                  <div className="relative">
+                    <div className="h-44 flex items-center justify-center">
+                      <img
+                        src={magazine.logo_url}
+                        alt={magazine.name}
+                        className="max-h-40 w-auto object-contain"
+                      />
+                    </div>
+                    <h3 className="text-center text-lg font-semibold text-gray-900 group-hover:text-red-600 transition-colors mt-5">
+                      {magazine.name}
+                    </h3>
+                    <div className="mt-4 flex items-center justify-center text-red-600 font-semibold gap-1">
+                      <span className="text-base">Visit site</span>
+                      <ExternalLink className="w-5 h-5" />
+                    </div>
+                  </div>
                 </a>
               ))}
             </div>

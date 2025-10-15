@@ -21,7 +21,7 @@ export default function Footer({ onNavigate }: FooterProps) {
     { icon: Facebook, label: 'Facebook', href: '#' },
     { icon: Twitter, label: 'Twitter', href: '#' },
     { icon: Instagram, label: 'Instagram', href: '#' },
-    { icon: Youtube, label: 'YouTube', href: '#' }
+    { icon: Youtube, label: 'YouTube', href: 'https://youtube.com/@podcastwithkamran?si=TeBJ_R5vksGoSrXk' }
   ];
 
   return (

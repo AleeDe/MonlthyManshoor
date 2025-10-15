@@ -85,11 +85,20 @@ export default function ArchivePage({ onNavigate }: ArchivePageProps) {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white pt-24 pb-16">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+        {/* faint background logo behind header */}
+        <img src="/hero-logo.png" alt="" aria-hidden className="pointer-events-none select-none absolute left-1/2 top-20 transform -translate-x-1/2 w-72 opacity-5 sm:opacity-8 md:w-96 md:opacity-12 lg:w-[28rem] lg:opacity-18 mix-blend-multiply" />
         <div className="text-center mb-12">
-          <h1 className="text-5xl font-bold text-gray-900 mb-4">Magazine Archive</h1>
-          <p className="text-2xl text-gray-600 font-urdu" dir="rtl">میگزین آرکائیو</p>
-          <p className="text-lg text-gray-600 mt-4">Explore {issues.length} issues from our 45-year collection</p>
+          <h1 className="text-5xl font-bold text-gray-900 mb-4">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-red-700">Manshoor</span>, Pakistan’s Oldest Progressive Socio-Economic and Literary Journal
+          </h1>
+          <div className="h-1 w-24 bg-gradient-to-r from-red-600 to-red-500 rounded-full mx-auto mb-6"></div>
+          <p className="text-2xl text-gray-600 font-urdu" dir="rtl">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-red-700">منشور</span>
+            &nbsp; پاکستان کا قدیم ترین ترقی پسند معاشی، سماجی اور ادبی جریدہ
+          </p>
+          <p className="text-lg text-gray-600 mt-4">Five Decades of Publishing, Resistance, and Revival</p>
+          <p className="text-lg text-gray-600 font-urdu" dir="rtl">نصف صدی کی اشاعت، مزاحمت اور احیاء کی داستان</p>
         </div>
 
         <div className="bg-white rounded-3xl shadow-xl p-6 mb-8">
