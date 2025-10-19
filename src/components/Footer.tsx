@@ -30,8 +30,8 @@ export default function Footer({ onNavigate }: FooterProps) {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
           <div>
             <div className="flex items-center gap-3 mb-4">
-              <div className="bg-gradient-to-br from-red-600 to-red-700 p-2 rounded-xl">
-                <BookOpen className="w-6 h-6" />
+              <div className="h-8 rounded-xl">
+                <img src="/logo.png" alt="Magazine Archive logo" className="w-8 h-8 object-cover rounded" />
               </div>
               <div>
                 <h3 className="text-xl font-bold">Magazine Archive</h3>
@@ -39,10 +39,10 @@ export default function Footer({ onNavigate }: FooterProps) {
               </div>
             </div>
             <p className="text-gray-400 text-sm leading-relaxed">
-              Preserving 45 years of literary excellence and cultural heritage through our digital archive.
+              Preserving 61 years of literary excellence and cultural heritage through our digital archive.
             </p>
             <p className="text-gray-400 text-sm font-urdu mt-2 leading-relaxed" dir="rtl">
-              45 سال کی ادبی عظمت اور ثقافتی ورثے کو ڈیجیٹل آرکائیو کے ذریعے محفوظ کرنا
+              61 سال کی ادبی عظمت اور ثقافتی ورثے کو ڈیجیٹل آرکائیو کے ذریعے محفوظ کرنا
             </p>
           </div>
 

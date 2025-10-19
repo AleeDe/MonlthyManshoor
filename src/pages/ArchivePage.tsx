@@ -90,16 +90,25 @@ export default function ArchivePage({ onNavigate }: ArchivePageProps) {
         <img src="/hero-logo.png" alt="" aria-hidden className="pointer-events-none select-none absolute left-1/2 top-20 transform -translate-x-1/2 w-72 opacity-5 sm:opacity-8 md:w-96 md:opacity-12 lg:w-[28rem] lg:opacity-18 mix-blend-multiply" />
         <div className="text-center mb-12">
           <h1 className="text-5xl font-bold text-gray-900 mb-4">
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-red-700">Manshoor</span>, Pakistan’s Oldest Progressive Socio-Economic and Literary Journal
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-red-700">"Manshoor"</span> Pakistan’s Oldest Progressive Socio-Economic and Literary Journal
           </h1>
           <div className="h-1 w-24 bg-gradient-to-r from-red-600 to-red-500 rounded-full mx-auto mb-6"></div>
           <p className="text-2xl text-gray-600 font-urdu" dir="rtl">
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-red-700">منشور</span>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-red-700">"منشور"</span>
             &nbsp; پاکستان کا قدیم ترین ترقی پسند معاشی، سماجی اور ادبی جریدہ
           </p>
-          <p className="text-lg text-gray-600 mt-4">Five Decades of Publishing, Resistance, and Revival</p>
+          <p className="text-lg text-gray-600 mt-4">Six Decades of Publishing, Resistance, and Revival</p>
           <p className="text-lg text-gray-600 font-urdu" dir="rtl">نصف صدی کی اشاعت، مزاحمت اور احیاء کی داستان</p>
+          <div className="mt-8">
+            <p className="font-urdu text-base sm:text-lg md:text-xl text-red-700 leading-snug text-center" dir="rtl">
+              ہم صبح پرستوں کی یہ ریت پرانی ہے<br />
+              ہاتھوں میں قلم رکھنا یا ہاتھ قلم رکھنا
+            </p>
+            <p className="font-urdu text-sm text-red-600 text-center mt-2" dir="rtl">— خالد علیگ</p>
+          </div>
         </div>
+
+
 
         <div className="bg-white rounded-3xl shadow-xl p-6 mb-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">

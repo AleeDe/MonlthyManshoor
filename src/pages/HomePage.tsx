@@ -66,19 +66,28 @@ export default function HomePage({ onNavigate }: HomePageProps) {
           
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div className="space-y-6 animate-fade-in">
-              <div className="inline-flex items-center gap-2 bg-red-100 text-red-700 px-4 py-2 rounded-full text-sm font-medium shadow-sm">
-                <Sparkles className="w-4 h-4" /> Since 1964 • Archives
+              <div className="inline-flex items-center gap-2 bg-red-100 text-red-700 px-4 py-2 rounded-full text-sm font-medium">
+                <Sparkles className="w-4 h-4" />
+                45 Years of Excellence
               </div>
 
-              <p className="text-2xl md:text-3xl font-semibold text-gray-900 leading-relaxed">
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-red-700">Manshoor Archives,</span> Started publishing in 1964 under the leadership of Comrade Tufail Abbas. The living history of Pakistan’s Left, surviving bans and forced closures for over five decades.
+              <h1 className="text-7xl md:text-5xl font-bold text-gray-900 leading-tight">
+                <span className="block text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-red-700">
+                  ماہنامہ منشور
+                </span>
+              </h1>
+
+              <p className="text-xl text-gray-600 leading-relaxed font-urdu" dir="rtl">
+اوراقِ منشور کامریڈ <span className="text-red-600">طفیل عباس</span> کی قیادت میں <span className="text-red-600">1964</span> میں اشاعت کا آغاز۔ نصف صدی سے زائد فکری و عوامی مزاحمت کی زندہ داستان، جو پابندیوں کے باوجود جاری رہی۔
               </p>
 
-              <p className="font-urdu text-xl sm:text-2xl md:text-3xl text-gray-900 leading-relaxed" dir="rtl">
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-red-700">اوراقِ منشور</span> کامریڈ طفیل عباس کی قیادت میں 1964 میں اشاعت کا آغاز۔ نصف صدی سے زائد فکری و عوامی مزاحمت کی زندہ داستان، جو پابندیوں کے باوجود جاری رہی۔
+              <p className="text-lg text-gray-600 leading-relaxed">
+                Pakistan’s <span className=" text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-red-700">
+                  Oldest
+                </span> Progressive Socio-Economic and Literary Voice, <span className=" text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-red-700">
+                  six
+                </span> Decades of Publication and Resistance
               </p>
-
-              <div className="h-1 w-24 bg-gradient-to-r from-red-600 to-red-500 rounded-full"></div>
 
               <div className="flex flex-wrap gap-4 pt-4">
                 <button
