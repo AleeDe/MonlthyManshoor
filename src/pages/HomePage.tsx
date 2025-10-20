@@ -68,7 +68,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
             <div className="space-y-6 animate-fade-in">
               <div className="inline-flex items-center gap-2 bg-red-100 text-red-700 px-4 py-2 rounded-full text-sm font-medium">
                 <Sparkles className="w-4 h-4" />
-                45 Years of Excellence
+                61 Years of Excellence
               </div>
 
               <h1 className="text-7xl md:text-5xl font-bold text-gray-900 leading-tight">
@@ -78,7 +78,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
               </h1>
 
               <p className="text-xl text-gray-600 leading-relaxed font-urdu" dir="rtl">
-اوراقِ منشور کامریڈ <span className="text-red-600">طفیل عباس</span> کی قیادت میں <span className="text-red-600">1964</span> میں اشاعت کا آغاز۔ نصف صدی سے زائد فکری و عوامی مزاحمت کی زندہ داستان، جو پابندیوں کے باوجود جاری رہی۔
+ماہنامہ منشور کا اجرا کامریڈ <span className="text-red-600">طفیل عباس</span> کی قیادت میں <span className="text-red-600">1964</span> میں ہوا۔ چھ عشروں سے زائد فکری و عوامی مزاحمت کی زندہ داستان، جو پابندیوں کے باوجود جاری رہی
               </p>
 
               <p className="text-lg text-gray-600 leading-relaxed">
@@ -171,10 +171,10 @@ export default function HomePage({ onNavigate }: HomePageProps) {
 
           <div className="bg-white p-8 rounded-3xl shadow-xl">
             <p className="text-lg text-gray-700 leading-relaxed mb-6">
-              For 45 years, our magazine has been a beacon of Urdu literature and cultural preservation. This digital archive represents decades of thoughtful articles, creative works, and cultural commentary that have shaped generations of readers.
+              For 61 years, our magazine has been a beacon of Urdu literature and cultural preservation. This digital archive represents decades of thoughtful articles, creative works, and cultural commentary that have shaped generations of readers.
             </p>
             <p className="text-lg text-gray-700 leading-relaxed font-urdu" dir="rtl">
-              45 سالوں سے، ہمارا میگزین اردو ادب اور ثقافتی تحفظ کا مینار رہا ہے۔ یہ ڈیجیٹل آرکائیو کئی دہائیوں کے سوچے سمجھے مضامین، تخلیقی کاموں اور ثقافتی تبصروں کی نمائندگی کرتا ہے جنہوں نے قارئین کی نسلوں کو تشکیل دیا ہے۔
+              61 سالوں سے، ہمارا میگزین اردو ادب اور ثقافتی تحفظ کا مینار رہا ہے۔ یہ ڈیجیٹل آرکائیو کئی دہائیوں کے سوچے سمجھے مضامین، تخلیقی کاموں اور ثقافتی تبصروں کی نمائندگی کرتا ہے جنہوں نے قارئین کی نسلوں کو تشکیل دیا ہے۔
             </p>
           </div>
         </div>

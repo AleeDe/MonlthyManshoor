@@ -98,10 +98,11 @@ export default function ArchivePage({ onNavigate }: ArchivePageProps) {
             &nbsp; پاکستان کا قدیم ترین ترقی پسند معاشی، سماجی اور ادبی جریدہ
           </p>
           <p className="text-lg text-gray-600 mt-4">Six Decades of Publishing, Resistance, and Revival</p>
-          <p className="text-lg text-gray-600 font-urdu" dir="rtl">نصف صدی کی اشاعت، مزاحمت اور احیاء کی داستان</p>
+          <p className="text-lg text-gray-600 font-urdu" dir="rtl">چھ دہائیوں کی اشاعت، مزاحمت اور احیاء کی داستان</p>
           <div className="mt-8">
             <p className="font-urdu text-base sm:text-lg md:text-xl text-red-700 leading-snug text-center" dir="rtl">
               ہم صبح پرستوں کی یہ ریت پرانی ہے<br />
+              <br />
               ہاتھوں میں قلم رکھنا یا ہاتھ قلم رکھنا
             </p>
             <p className="font-urdu text-sm text-red-600 text-center mt-2" dir="rtl">— خالد علیگ</p>
