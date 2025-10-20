@@ -305,7 +305,7 @@ export default function AdminPage() {
                     : 'text-gray-600 hover:text-gray-900'
                 }`}
               >
-                Magazine Issues ({issues.length})
+                Magazine issues ({issues.length})
               </button>
               <button
                 onClick={() => setActiveTab('sisters')}
