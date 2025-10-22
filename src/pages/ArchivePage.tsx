@@ -93,19 +93,19 @@ export default function ArchivePage({ onNavigate }: ArchivePageProps) {
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-red-700">"Manshoor"</span> Pakistan’s Oldest Progressive Socio-Economic and Literary Journal
           </h1>
           <div className="h-1 w-24 bg-gradient-to-r from-red-600 to-red-500 rounded-full mx-auto mb-6"></div>
-          <p className="text-2xl text-gray-600 font-urdu" dir="rtl">
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-red-700">"منشور"</span>
-            &nbsp; پاکستان کا قدیم ترین ترقی پسند معاشی، سماجی اور ادبی جریدہ
+          
+          <p className="text-lg text-gray-600 font-urdu text-center" dir="rtl">
+            ماہنامہ <span className="text-red-700">منشور</span><br />
+            ترقی پسند فکر کا ترجمان<br />
+            چھ دہائیوں کی اشاعت اور مزاحمت کا جاری سفر
           </p>
-          <p className="text-lg text-gray-600 mt-4">Six Decades of Publishing, Resistance, and Revival</p>
-          <p className="text-lg text-gray-600 font-urdu" dir="rtl">چھ دہائیوں کی اشاعت، مزاحمت اور احیاء کی داستان</p>
-          <div className="mt-8">
+          <div className="mt-8  inline-block px-4 py-2 rounded-2xl">
             <p className="font-urdu text-base sm:text-lg md:text-xl text-red-700 leading-snug text-center" dir="rtl">
-              ہم صبح پرستوں کی یہ ریت پرانی ہے<br />
+              <br /><br /><br />ہم صبح پرستوں کی یہ ریت پرانی ہے<br />
               <br />
               ہاتھوں میں قلم رکھنا یا ہاتھ قلم رکھنا
             </p>
-            <p className="font-urdu text-sm text-red-600 text-center mt-2" dir="rtl">— خالد علیگ</p>
+            <p className="font-urdu text-sm text-red-600 text-left mt-2 pl-15" dir="rtl">— خالد علیگ</p>
           </div>
         </div>
 
