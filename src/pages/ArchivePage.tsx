@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react';
-import { Search, Filter, ChevronLeft, ChevronRight } from 'lucide-react';
-import { supabase } from '../lib/supabase';
+import { useEffect, useState, useRef } from 'react';
+import { Search, Filter } from 'lucide-react';
+import { getAllIssues, imgUrl } from '../lib/sanity';
 import type { MagazineIssue } from '../lib/database.types';
 import ArchiveSkeleton from '../components/ArchiveSkeleton';
+import { setSeo } from '../lib/seo';
 
 interface ArchivePageProps {
   onNavigate: (page: string, issueId?: string) => void;
@@ -16,11 +17,16 @@ export default function ArchivePage({ onNavigate }: ArchivePageProps) {
   const [selectedYear, setSelectedYear] = useState<number | 'all'>('all');
   const [selectedMonth, setSelectedMonth] = useState<number | 'all'>('all');
   const [availableYears, setAvailableYears] = useState<number[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 12;
+  // Infinite scroll: show `visibleCount` cards, grow when sentinel enters view
+  const [visibleCount, setVisibleCount] = useState(18);
+  const sentinelRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     loadIssues();
+  }, []);
+
+  useEffect(() => {
+    setSeo({ title: 'Archive', description: 'Browse and read all issues of Monthly Manshoor from the digital archive.' });
   }, []);
 
   useEffect(() => {
@@ -29,20 +35,13 @@ export default function ArchivePage({ onNavigate }: ArchivePageProps) {
 
   const loadIssues = async () => {
     try {
-      const { data, error } = await supabase
-        .from('magazine_issues')
-        .select('*')
-        .order('issue_year', { ascending: false })
-        .order('issue_month', { ascending: false });
-
-      if (error) throw error;
-
-      if (data) {
-        const typed = (data as unknown as MagazineIssue[]) ?? [];
-        setIssues(typed);
-        const years = [...new Set(typed.map(issue => issue.issue_year))].sort((a, b) => b - a);
-        setAvailableYears(years);
-      }
+      const data = await getAllIssues();
+      const typed = [...data].sort(
+        (a, b) => b.issue_year - a.issue_year || b.issue_month - a.issue_month
+      );
+      setIssues(typed);
+      const years = [...new Set(typed.map(issue => issue.issue_year))].sort((a, b) => b - a);
+      setAvailableYears(years);
     } catch (error) {
       console.error('Error loading issues:', error);
     } finally {
@@ -69,7 +68,7 @@ export default function ArchivePage({ onNavigate }: ArchivePageProps) {
     }
 
     setFilteredIssues(filtered);
-    setCurrentPage(1);
+    setVisibleCount(18);
   };
 
   const getMonthName = (month: number) => {
@@ -77,9 +76,24 @@ export default function ArchivePage({ onNavigate }: ArchivePageProps) {
     return months[month - 1];
   };
 
-  const totalPages = Math.ceil(filteredIssues.length / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const paginatedIssues = filteredIssues.slice(startIndex, startIndex + itemsPerPage);
+  const paginatedIssues = filteredIssues.slice(0, visibleCount);
+  const hasMore = visibleCount < filteredIssues.length;
+
+  // Load more when the sentinel scrolls into view
+  useEffect(() => {
+    const sentinel = sentinelRef.current;
+    if (!sentinel || !hasMore) return;
+    const obs = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          setVisibleCount((c) => c + 18);
+        }
+      },
+      { rootMargin: '400px' } // start loading before the user reaches the end
+    );
+    obs.observe(sentinel);
+    return () => obs.disconnect();
+  }, [hasMore, paginatedIssues.length]);
 
   if (loading) return <ArchiveSkeleton />;
 
@@ -105,7 +119,7 @@ export default function ArchivePage({ onNavigate }: ArchivePageProps) {
               <br />
               ہاتھوں میں قلم رکھنا یا ہاتھ قلم رکھنا
             </p>
-            <p className="font-urdu text-sm text-red-600 text-left mt-2 pl-15" dir="rtl">— خالد علیگ</p>
+            <p className="font-urdu text-sm text-red-600 text-left mt-2 pl-15" dir="rtl">خالد علیگ</p>
           </div>
         </div>
 
@@ -188,12 +202,12 @@ export default function ArchivePage({ onNavigate }: ArchivePageProps) {
                 >
                   <div className="relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
                     <img
-                      src={issue.cover_image_url}
+                      src={imgUrl(issue.cover_image_url, 500)} loading="lazy"
                       alt={issue.title}
                       className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                    <div className="absolute bottom-0 left-0 right-0 p-4 text-white transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div className="pointer-events-none absolute bottom-0 left-0 right-0 p-4 text-white transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
                       <p className="text-xs font-medium mb-1 line-clamp-2">{issue.title}</p>
                       <p className="text-xs opacity-90">{getMonthName(issue.issue_month)} {issue.issue_year}</p>
                     </div>
@@ -202,48 +216,9 @@ export default function ArchivePage({ onNavigate }: ArchivePageProps) {
               ))}
             </div>
 
-            {totalPages > 1 && (
-              <div className="flex justify-center items-center gap-2 mt-12">
-                <button
-                  onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
-                  disabled={currentPage === 1}
-                  className="p-2 rounded-xl border-2 border-gray-200 hover:border-red-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
-                >
-                  <ChevronLeft className="w-5 h-5" />
-                </button>
-
-                {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => {
-                  if (
-                    page === 1 ||
-                    page === totalPages ||
-                    (page >= currentPage - 1 && page <= currentPage + 1)
-                  ) {
-                    return (
-                      <button
-                        key={page}
-                        onClick={() => setCurrentPage(page)}
-                        className={`min-w-[2.5rem] h-10 rounded-xl font-medium transition-all ${
-                          currentPage === page
-                            ? 'bg-red-600 text-white shadow-lg'
-                            : 'border-2 border-gray-200 hover:border-red-600'
-                        }`}
-                      >
-                        {page}
-                      </button>
-                    );
-                  } else if (page === currentPage - 2 || page === currentPage + 2) {
-                    return <span key={page} className="px-2">...</span>;
-                  }
-                  return null;
-                })}
-
-                <button
-                  onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
-                  disabled={currentPage === totalPages}
-                  className="p-2 rounded-xl border-2 border-gray-200 hover:border-red-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
-                >
-                  <ChevronRight className="w-5 h-5" />
-                </button>
+            {hasMore && (
+              <div ref={sentinelRef} className="flex justify-center items-center py-10">
+                <div className="animate-spin rounded-full h-8 w-8 border-4 border-red-600 border-t-transparent"></div>
               </div>
             )}
           </>

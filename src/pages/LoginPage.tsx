@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { LogIn, UserPlus, Lock, Mail } from 'lucide-react';
+import { LogIn, Lock } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 
 interface LoginPageProps {
@@ -7,9 +7,7 @@ interface LoginPageProps {
 }
 
 export default function LoginPage({ onNavigate }: LoginPageProps) {
-  const { signIn, signUp } = useAuth();
-  const [isSignUp, setIsSignUp] = useState(false);
-  const [email, setEmail] = useState('');
+  const { signIn } = useAuth();
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -19,20 +17,12 @@ export default function LoginPage({ onNavigate }: LoginPageProps) {
     setError('');
     setLoading(true);
 
-    try {
-      const { error } = isSignUp
-        ? await signUp(email, password)
-        : await signIn(email, password);
-
-      if (error) {
-        setError(error.message);
-      } else {
-        onNavigate('home');
-      }
-    } catch (err) {
-      setError('An unexpected error occurred');
-    } finally {
-      setLoading(false);
+    const { error } = await signIn(password);
+    setLoading(false);
+    if (error) {
+      setError(error);
+    } else {
+      onNavigate('admin');
     }
   };
 
@@ -44,12 +34,8 @@ export default function LoginPage({ onNavigate }: LoginPageProps) {
             <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-red-600 to-red-700 rounded-2xl mb-4">
               <Lock className="w-8 h-8 text-white" />
             </div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">
-              {isSignUp ? 'Create Account' : 'Welcome Back'}
-            </h1>
-            <p className="text-gray-600">
-              {isSignUp ? 'Sign up to get started' : 'Sign in to continue'}
-            </p>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">Admin Login</h1>
+            <p className="text-gray-600">Enter the admin password to continue</p>
           </div>
 
           {error && (
@@ -59,21 +45,6 @@ export default function LoginPage({ onNavigate }: LoginPageProps) {
           )}
 
           <form onSubmit={handleSubmit} className="space-y-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                <Mail className="w-4 h-4 inline mr-1" />
-                Email
-              </label>
-              <input
-                type="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-red-600 focus:outline-none transition-colors"
-                placeholder="your@email.com"
-              />
-            </div>
-
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 <Lock className="w-4 h-4 inline mr-1" />
@@ -86,7 +57,6 @@ export default function LoginPage({ onNavigate }: LoginPageProps) {
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-red-600 focus:outline-none transition-colors"
                 placeholder="••••••••"
-                minLength={6}
               />
             </div>
 
@@ -99,26 +69,12 @@ export default function LoginPage({ onNavigate }: LoginPageProps) {
                 <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent" />
               ) : (
                 <>
-                  {isSignUp ? <UserPlus className="w-5 h-5" /> : <LogIn className="w-5 h-5" />}
-                  {isSignUp ? 'Sign Up' : 'Sign In'}
+                  <LogIn className="w-5 h-5" />
+                  Sign In
                 </>
               )}
             </button>
           </form>
-
-          <div className="mt-6 text-center">
-            <button
-              onClick={() => {
-                setIsSignUp(!isSignUp);
-                setError('');
-              }}
-              className="text-red-600 hover:text-red-700 font-medium"
-            >
-              {isSignUp
-                ? 'Already have an account? Sign in'
-                : "Don't have an account? Sign up"}
-            </button>
-          </div>
         </div>
       </div>
     </div>

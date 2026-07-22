@@ -1,4 +1,4 @@
-import { Facebook, Twitter, Instagram, Youtube, BookOpen, KeyRound } from 'lucide-react';
+import { Facebook, Twitter, Instagram, Youtube, KeyRound } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 
 interface FooterProps {
@@ -6,13 +6,13 @@ interface FooterProps {
 }
 
 export default function Footer({ onNavigate }: FooterProps) {
-  const { user } = useAuth();
+  const { isAdmin } = useAuth();
   const currentYear = new Date().getFullYear();
 
   const footerLinks = [
     { label: 'Home', page: 'home' },
     { label: 'Archive', page: 'archive' },
-    { label: 'Admin Setup Guide', page: 'setup' },
+    
     { label: 'Contact', page: 'home' },
     { label: 'Privacy Policy', page: 'home' }
   ];
@@ -90,7 +90,7 @@ export default function Footer({ onNavigate }: FooterProps) {
             <p className="text-gray-400 text-sm font-urdu" dir="rtl">
               تمام حقوق محفوظ ہیں
             </p>
-            {!user && (
+            {!isAdmin && (
               <button
                 onClick={() => onNavigate('login')}
                 className="group ml-2 text-gray-500/20 hover:text-gray-300 transition-colors text-xs flex items-center gap-1"

@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import { BookOpen, Library, ArrowRight, Sparkles, ExternalLink } from 'lucide-react';
-import { supabase } from '../lib/supabase';
+import { getLatestIssue, getFeaturedIssues, getSisterMagazines, imgUrl } from '../lib/sanity';
 import type { MagazineIssue, SisterMagazine } from '../lib/database.types';
 import HomeSkeleton from '../components/HomeSkeleton';
+import { setSeo } from '../lib/seo';
 
 interface HomePageProps {
   onNavigate: (page: string, issueId?: string) => void;
@@ -18,31 +19,21 @@ export default function HomePage({ onNavigate }: HomePageProps) {
     loadData();
   }, []);
 
+  useEffect(() => {
+    setSeo({});
+  }, []);
+
   const loadData = async () => {
     try {
-      const [latestResponse, featuredResponse, sistersResponse] = await Promise.all([
-        supabase
-          .from('magazine_issues')
-          .select('*')
-          .order('publish_date', { ascending: false })
-          .limit(1)
-          .maybeSingle(),
-        supabase
-          .from('magazine_issues')
-          .select('*')
-          .eq('featured', true)
-          .order('publish_date', { ascending: false })
-          .limit(4),
-        supabase
-          .from('sister_magazines')
-          .select('*')
-          .eq('active', true)
-          .order('display_order', { ascending: true })
+      const [latest, featured, sisters] = await Promise.all([
+        getLatestIssue(),
+        getFeaturedIssues(4),
+        getSisterMagazines(true),
       ]);
 
-      if (latestResponse.data) setLatestIssue(latestResponse.data);
-      if (featuredResponse.data) setFeaturedIssues(featuredResponse.data);
-      if (sistersResponse.data) setSisterMagazines(sistersResponse.data);
+      if (latest) setLatestIssue(latest);
+      setFeaturedIssues(featured);
+      setSisterMagazines(sisters);
     } catch (error) {
       console.error('Error loading data:', error);
     } finally {
@@ -115,7 +106,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                 <div className="absolute -inset-4 bg-gradient-to-r from-red-600 to-red-700 rounded-3xl blur-2xl opacity-20 group-hover:opacity-30 transition-opacity duration-300"></div>
                 <div className="relative bg-white p-4 rounded-3xl shadow-2xl">
                   <img
-                    src={latestIssue.cover_image_url}
+                    src={imgUrl(latestIssue.cover_image_url, 800)}
                     alt={latestIssue.title}
                     className="w-full h-auto rounded-2xl shadow-lg"
                   />
@@ -147,12 +138,12 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                 >
                   <div className="relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
                     <img
-                      src={issue.cover_image_url}
+                      src={imgUrl(issue.cover_image_url, 500)} loading="lazy"
                       alt={issue.title}
                       className="w-full h-80 object-cover group-hover:scale-110 transition-transform duration-500"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                    <div className="absolute bottom-0 left-0 right-0 p-6 text-white transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div className="pointer-events-none absolute bottom-0 left-0 right-0 p-6 text-white transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
                       <p className="text-sm font-medium mb-1">{issue.title}</p>
                       <p className="text-xs opacity-90">{getMonthName(issue.issue_month)} {issue.issue_year}</p>
                     </div>
@@ -209,7 +200,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                   <div className="relative">
                     <div className="h-44 flex items-center justify-center">
                       <img
-                        src={magazine.logo_url}
+                        src={imgUrl(magazine.logo_url, 400)} loading="lazy"
                         alt={magazine.name}
                         className="max-h-40 w-auto object-contain"
                       />

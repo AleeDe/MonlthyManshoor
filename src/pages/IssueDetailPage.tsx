@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
 import { ArrowLeft, Download, ChevronLeft, ChevronRight, Calendar, BookOpen } from 'lucide-react';
-import { supabase } from '../lib/supabase';
+import { getIssueById, getAllIssues, imgUrl } from '../lib/sanity';
 import type { MagazineIssue } from '../lib/database.types';
 import IssueDetailSkeleton from '../components/IssueDetailSkeleton';
+import PdfReader from '../components/PdfReader';
+import { setSeo } from '../lib/seo';
 
 interface IssueDetailPageProps {
   issueId: string;
@@ -21,35 +23,23 @@ export default function IssueDetailPage({ issueId, onNavigate }: IssueDetailPage
 
   const loadIssue = async () => {
     try {
-      const { data: currentIssue, error } = await supabase
-        .from('magazine_issues')
-        .select('*')
-        .eq('id', issueId)
-        .maybeSingle();
-
-      if (error) throw error;
+      const [currentIssue, all] = await Promise.all([
+        getIssueById(issueId),
+        getAllIssues(), // sorted publish_date desc
+      ]);
 
       if (currentIssue) {
         setIssue(currentIssue);
-
-        const { data: prevData } = await supabase
-          .from('magazine_issues')
-          .select('*')
-          .lt('publish_date', currentIssue.publish_date)
-          .order('publish_date', { ascending: false })
-          .limit(1)
-          .maybeSingle();
-
-        const { data: nextData } = await supabase
-          .from('magazine_issues')
-          .select('*')
-          .gt('publish_date', currentIssue.publish_date)
-          .order('publish_date', { ascending: true })
-          .limit(1)
-          .maybeSingle();
-
-        setPrevIssue(prevData);
-        setNextIssue(nextData);
+        setSeo({
+          title: currentIssue.title,
+          description: currentIssue.description || undefined,
+          image: imgUrl(currentIssue.cover_image_url, 800),
+          url: window.location.href,
+        });
+        const idx = all.findIndex((i) => i.id === currentIssue.id);
+        // list is desc: next (newer) is idx-1, prev (older) is idx+1
+        setNextIssue(idx > 0 ? all[idx - 1] : null);
+        setPrevIssue(idx >= 0 && idx < all.length - 1 ? all[idx + 1] : null);
       }
     } catch (error) {
       console.error('Error loading issue:', error);
@@ -101,7 +91,7 @@ export default function IssueDetailPage({ issueId, onNavigate }: IssueDetailPage
             <div className="sticky top-24">
               <div className="bg-white p-6 rounded-3xl shadow-xl">
                 <img
-                  src={issue.cover_image_url}
+                  src={imgUrl(issue.cover_image_url, 600)}
                   alt={issue.title}
                   className="w-full h-auto rounded-2xl shadow-lg mb-6"
                 />
@@ -141,13 +131,7 @@ export default function IssueDetailPage({ issueId, onNavigate }: IssueDetailPage
               </div>
 
               <div className="p-4">
-                <div className="relative w-full" style={{ paddingBottom: '141.4%' }}>
-                  <iframe
-                    src={`${issue.pdf_url}#view=FitH`}
-                    className="absolute inset-0 w-full h-full rounded-2xl"
-                    title={issue.title}
-                  />
-                </div>
+                <PdfReader url={issue.pdf_url} title={issue.title} />
               </div>
             </div>
           </div>
@@ -168,7 +152,7 @@ export default function IssueDetailPage({ issueId, onNavigate }: IssueDetailPage
                   <p className="text-sm text-gray-600">{getMonthName(prevIssue.issue_month)} {prevIssue.issue_year}</p>
                 </div>
                 <img
-                  src={prevIssue.cover_image_url}
+                  src={imgUrl(prevIssue.cover_image_url, 200)} loading="lazy"
                   alt={prevIssue.title}
                   className="w-16 h-20 object-cover rounded-lg shadow-md"
                 />
@@ -185,7 +169,7 @@ export default function IssueDetailPage({ issueId, onNavigate }: IssueDetailPage
                 className="group flex items-center gap-4 p-6 rounded-2xl border-2 border-gray-200 hover:border-red-600 hover:shadow-xl transition-all duration-300 text-left"
               >
                 <img
-                  src={nextIssue.cover_image_url}
+                  src={imgUrl(nextIssue.cover_image_url, 200)} loading="lazy"
                   alt={nextIssue.title}
                   className="w-16 h-20 object-cover rounded-lg shadow-md"
                 />

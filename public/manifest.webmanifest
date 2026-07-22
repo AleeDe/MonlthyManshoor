@@ -1,0 +1,23 @@
+{
+  "name": "Monthly Manshoor - ماہنامہ منشور",
+  "short_name": "Manshoor",
+  "description": "Pakistan's oldest progressive socio-economic and literary Urdu monthly, published since 1964.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#dc2626",
+  "lang": "ur",
+  "icons": [
+    {
+      "src": "/logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/favicon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}

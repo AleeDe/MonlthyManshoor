@@ -8,11 +8,11 @@ interface NavbarProps {
 }
 
 export default function Navbar({ currentPage, onNavigate }: NavbarProps) {
-  const { user, isAdmin, signOut } = useAuth();
+  const { isAdmin, signOut } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const handleSignOut = async () => {
-    await signOut();
+  const handleSignOut = () => {
+    signOut();
     onNavigate('home');
   };
 
@@ -58,7 +58,7 @@ export default function Navbar({ currentPage, onNavigate }: NavbarProps) {
                 <span className="block text-xs font-urdu">{item.labelUrdu}</span>
               </button>
             ))}
-            {user && (
+            {isAdmin && (
               <button
                 onClick={handleSignOut}
                 className="ml-2 px-4 py-2 rounded-xl font-medium text-gray-700 hover:bg-gray-100 transition-all duration-300 flex items-center gap-2"
@@ -97,7 +97,7 @@ export default function Navbar({ currentPage, onNavigate }: NavbarProps) {
               <span className="block text-xs font-urdu">{item.labelUrdu}</span>
             </button>
           ))}
-          {user && (
+          {isAdmin && (
             <button
               onClick={() => {
                 handleSignOut();

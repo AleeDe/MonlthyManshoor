@@ -1,64 +1,92 @@
-import { useState } from 'react';
+import { useEffect } from 'react';
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  useNavigate,
+  useParams,
+  useLocation,
+  Navigate,
+} from 'react-router-dom';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
-import AuthDebug from './components/AuthDebug';
 import HomePage from './pages/HomePage';
 import ArchivePage from './pages/ArchivePage';
 import IssueDetailPage from './pages/IssueDetailPage';
 import AdminPage from './pages/AdminPage';
 import LoginPage from './pages/LoginPage';
-import AdminSetupPage from './pages/AdminSetupPage';
 
-function AppContent() {
-  const { isAdmin, loading, user } = useAuth();
-  const [currentPage, setCurrentPage] = useState<string>('home');
-  const [selectedIssueId, setSelectedIssueId] = useState<string>('');
-
-  const handleNavigate = (page: string, issueId?: string) => {
-    if (page === 'admin') {
-      if (!user) {
-        setCurrentPage('login');
-        return;
-      }
-      if (!isAdmin) {
-        alert('Access denied. Admin privileges required.');
-        return;
-      }
-    }
-
-    setCurrentPage(page);
-    if (issueId) {
-      setSelectedIssueId(issueId);
-    }
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+// Bridge the pages' onNavigate(page, issueId) API onto router URLs
+function useAppNavigate() {
+  const navigate = useNavigate();
+  return (page: string, issueId?: string) => {
+    const path =
+      page === 'home' ? '/' :
+      page === 'archive' ? '/archive' :
+      page === 'issue' && issueId ? `/issue/${issueId}` :
+      page === 'admin' ? '/admin' :
+      page === 'login' ? '/login' : '/';
+    navigate(path);
   };
+}
 
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-white">
-        <div className="animate-spin rounded-full h-16 w-16 border-4 border-red-600 border-t-transparent"></div>
-      </div>
-    );
-  }
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo({ top: 0 });
+  }, [pathname]);
+  return null;
+}
+
+function CurrentPageFromPath(): string {
+  const { pathname } = useLocation();
+  if (pathname.startsWith('/archive')) return 'archive';
+  if (pathname.startsWith('/issue')) return 'issue';
+  if (pathname.startsWith('/admin')) return 'admin';
+  if (pathname.startsWith('/login')) return 'login';
+  return 'home';
+}
+
+function IssueRoute() {
+  const { id } = useParams();
+  const onNavigate = useAppNavigate();
+  if (!id) return <Navigate to="/archive" replace />;
+  return <IssueDetailPage issueId={id} onNavigate={onNavigate} />;
+}
+
+function AdminRoute() {
+  const { isAdmin } = useAuth();
+  if (!isAdmin) return <Navigate to="/login" replace />;
+  return <AdminPage />;
+}
+
+function LoginRoute() {
+  const onNavigate = useAppNavigate();
+  const { isAdmin } = useAuth();
+  if (isAdmin) return <Navigate to="/admin" replace />;
+  return <LoginPage onNavigate={onNavigate} />;
+}
+
+function AppShell() {
+  const onNavigate = useAppNavigate();
+  const currentPage = CurrentPageFromPath();
 
   return (
     <div className="min-h-screen bg-white">
-      <Navbar currentPage={currentPage} onNavigate={handleNavigate} />
-
+      <ScrollToTop />
+      <Navbar currentPage={currentPage} onNavigate={onNavigate} />
       <main>
-        {currentPage === 'home' && <HomePage onNavigate={handleNavigate} />}
-        {currentPage === 'archive' && <ArchivePage onNavigate={handleNavigate} />}
-        {currentPage === 'issue' && (
-          <IssueDetailPage issueId={selectedIssueId} onNavigate={handleNavigate} />
-        )}
-        {currentPage === 'admin' && isAdmin && <AdminPage />}
-        {currentPage === 'login' && <LoginPage onNavigate={handleNavigate} />}
-        {currentPage === 'setup' && <AdminSetupPage onNavigate={handleNavigate} />}
+        <Routes>
+          <Route path="/" element={<HomePage onNavigate={onNavigate} />} />
+          <Route path="/archive" element={<ArchivePage onNavigate={onNavigate} />} />
+          <Route path="/issue/:id" element={<IssueRoute />} />
+          <Route path="/admin" element={<AdminRoute />} />
+          <Route path="/login" element={<LoginRoute />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
       </main>
-
-      <Footer onNavigate={handleNavigate} />
-      
+      <Footer onNavigate={onNavigate} />
     </div>
   );
 }
@@ -66,7 +94,9 @@ function AppContent() {
 function App() {
   return (
     <AuthProvider>
-      <AppContent />
+      <BrowserRouter>
+        <AppShell />
+      </BrowserRouter>
     </AuthProvider>
   );
 }
